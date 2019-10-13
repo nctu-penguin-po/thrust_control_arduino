@@ -80,14 +80,14 @@ int main(void)
  */
 
     SerialPort arduino("/dev/ttyACM0");
-    /*
+    
     arduino.open(9600);
     while (cin>>tar) {
         result = (int)interpolation(tar);
         arduino.write(char(100));
         arduino.write(char(result/100));
         arduino.write(char(result%100));
-    }*/
+    }
     
     return 0;
 }
