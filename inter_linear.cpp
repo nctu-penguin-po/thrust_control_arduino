@@ -9,7 +9,7 @@ linear interpolation: http://boson4.phys.tku.edu.tw/numerical_methods/nm_units/i
 #include "SerialPort.h"
 
 #define N 76
-
+#define MOTOR_N 8
 using namespace std;
 
 int binSearch(double tar, double *data, double len)  // Return the index of which the element is smaller than tar
@@ -60,7 +60,7 @@ double interpolation(double a)
 int main(void)
 {
     double tar;
-    int result;
+    int result[MOTOR_N]={1500};
 
     /* while (cin>>tar) {
         cout<<interpolation(tar)<<endl<<endl;
@@ -81,12 +81,20 @@ int main(void)
 
     SerialPort arduino("/dev/ttyACM0");
     
-    arduino.open(9600);
+    arduino.open(115200);
     while (cin>>tar) {
-        result = (int)interpolation(tar);
         arduino.write(char(100));
-        arduino.write(char(result/100));
-        arduino.write(char(result%100));
+        for(int i =0;i<8;i++){
+            result[i] = (int)interpolation(tar);
+            if(result[i]>1800)result[i]=1800;
+            else if(result[i]<1200)result[i]=1200;
+            else if(result[i]==1488)result[i]=1500;
+            cout<<result[i]<<endl;
+            arduino.write(char(result[i]/100));
+            arduino.write(char(result[i]%100));
+        }
+        arduino.write(char(101));
+        
     }
     
     return 0;

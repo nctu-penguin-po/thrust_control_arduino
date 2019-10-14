@@ -40,10 +40,9 @@
 //#include "SerialPort.cpp"
 
 #define    BOTHER 0010000
-#ifndef SERIALPORT_H
-#define SERIALPORT_H
 
-
+#ifndef SERIAL_PORT_H
+#define SERIAL_PORT_H
 class SerialPort {
 	public:
 		SerialPort(const char *dev);

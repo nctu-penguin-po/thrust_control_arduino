@@ -29,9 +29,9 @@
  */
 
 #include "SerialPort.h"
+#include <iostream>
 
-
-//extern "C" int tcdrain (int __fd);
+extern "C" int tcdrain (int __fd);
 
 SerialPort::SerialPort(const char *device) {
 	_dev = device;
