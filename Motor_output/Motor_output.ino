@@ -39,6 +39,7 @@ void loop() {
       //Serial2.println("101!");
         if(safe_counter==16){      //ascii碼101則跳出 並確定8個馬達有輸出值
           //Serial2.println("out!");
+          Serial.print(2);
           break;
         }
       }
@@ -52,7 +53,10 @@ void loop() {
     }
     
     //Serial2.println("hehe");
-    }
+  }
+
+  
+  
   for(int i=0;i<8;i++){
     Serial2.print(i);
     Serial2.print(":");

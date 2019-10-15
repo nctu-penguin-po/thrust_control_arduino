@@ -57,10 +57,13 @@ double interpolation(double a)
     return (y[index+1] - y[index]) / (x[index+1] - x[index]) * (a - x[index]) + y[index];
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
     double tar;
     int result[MOTOR_N]={1500};
+    char *port_loc, defult_port[] = "/dev/ttyACM0";
+
+    int data_from_arduino=0;
 
     /* while (cin>>tar) {
         cout<<interpolation(tar)<<endl<<endl;
@@ -79,12 +82,23 @@ int main(void)
 	arduino.close();
  */
 
-    SerialPort arduino("/dev/ttyACM0");
+    if (argv[1] == NULL)
+        port_loc = defult_port;
+    else
+        port_loc = argv[1];
+    SerialPort arduino(port_loc);
     
-    arduino.open(115200);
+    if (arduino.open(115200))
+        cout<<"Very good"<<endl;
+    else
+        cout<<"Very bad"<<endl;
+
     while (cin>>tar) {
+        
+        // Input data
         arduino.write(char(100));
         for(int i =0;i<8;i++){
+
             result[i] = (int)interpolation(tar);
             if(result[i]>1800)result[i]=1800;
             else if(result[i]<1200)result[i]=1200;
@@ -93,9 +107,22 @@ int main(void)
             arduino.write(char(result[i]/100));
             arduino.write(char(result[i]%100));
         }
-        arduino.write(char(101));
-        
+        arduino.write(char(101));        
+
+        // Read data to check
+        data_from_arduino = arduino.read();
+        cout<<"data_from_arduino: "<<(char)data_from_arduino<<' '<<(int)data_from_arduino<<endl;
+        if (data_from_arduino)
+            cout<<"Success"<<endl;
+        else
+            cout<<"Fail"<<endl;
+
+        if (!arduino.available()) {
+            cout<<"Arduino disconnected."<<endl;
+            //exit(1);
+        }
     }
+    arduino.close();
     
     return 0;
 }
